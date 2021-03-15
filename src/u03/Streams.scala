@@ -39,11 +39,41 @@ object Streams {
       case _ => Empty()
     }
 
-    def iterate[A](init: => A)(next: A => A): Stream[A] = cons(init, iterate(next(init))(next))
+    //def iterate[A](init: => A)(next: A => A): Stream[A] = cons(init, iterate(next(init))(next))
+
+    def takeWhile[A](stream: Stream[A])(pred: A => Boolean): Stream[A] = stream match {
+      case Cons(head, tail) if pred(head()) => cons(head(), takeWhile(tail())(pred))
+      case _ => Empty()
+    }
+
+    def peek[A](stream: Stream[A])(exec: A => Unit): Stream[A] = map(stream)(x => {exec(x);x})
+
+    def fold[A, B](stream: Stream[A])(base: => B)( op: (A, B) => B): B = stream match {
+      case Cons(head, tail) => op(head(), fold(tail())(base)(op))
+      case Empty() => base
+    }
+
+    def iterate[A](init: => A)(next: A => A): Stream[A] = cons(init,iterate(next(init))(next))
+
+    def generate[A](seed: => A): Stream[A] = iterate(seed)(x => x)
+
   }
 }
 
 object StreamsMain extends App {
+
+  import Stream._
+  var s = cons(10,cons(11, cons(20, empty())));
+  println("s: " + s)
+  println("tolist: " + toList(s))
+  println("map: " + toList(map(s)(_+1)))
+  println("takewhile: " + takeWhile(s)(_<15))
+  println("peek: " + toList(peek(s)(println(_))))
+  println("fold: " + fold[Int,Int](s)(0)(_+_))
+  println(toList(takeWhile(iterate(0)(_+1))(_<50)))
+  println(toList(takeWhile(generate(Math.random()))(_>=0.1)))
+
+  /*
   // var simplifies chaining of functions a bit..
   var str = Stream.iterate(0)(_+1)   // {0,1,2,3,..}
   str = Stream.map(str)(_+1)    // {1,2,3,4,..}
@@ -52,5 +82,5 @@ object StreamsMain extends App {
   println(Stream.toList(str)) // [1,2,21,22,..,28]
 
   val corec: Stream[Int] = Stream.cons(1, corec) // {1,1,1,..}
-  println(Stream.toList(Stream.take(corec)(10))) // [1,1,..,1]
+  println(Stream.toList(Stream.take(corec)(10))) // [1,1,..,1]*/
 }
