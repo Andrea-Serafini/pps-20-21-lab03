@@ -24,4 +24,11 @@ class ListExtendedTest {
 
   }
 
+  @Test def testMap(){
+
+    assertEquals(Cons (20 , Cons (40 , Cons (60 , Nil ()))) , map ( lst )(v => v*2))
+    assertEquals(Cons (13 , Cons (23 , Cons (33 , Nil ())))  , map ( lst )(v => v+3))
+
+  }
+
 }
