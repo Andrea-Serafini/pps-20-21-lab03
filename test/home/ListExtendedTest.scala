@@ -31,4 +31,11 @@ class ListExtendedTest {
 
   }
 
+  @Test def testFilter(){
+
+    assertEquals(Cons (30 , Nil ()) , filter ( lst )(_>25))
+    assertEquals(Cons (10 , Cons (20 , Cons (30 , Nil ())))  , filter ( lst )(_%2==0))
+
+  }
+
 }
