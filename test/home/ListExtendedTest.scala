@@ -3,6 +3,8 @@ package home
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions._
 import home.ListsExtended.List._
+import u02.Optionals.Option.Some
+
 
 class ListExtendedTest {
 
@@ -35,6 +37,12 @@ class ListExtendedTest {
 
     assertEquals(Cons (30 , Nil ()) , filter ( lst )(_>25))
     assertEquals(Cons (10 , Cons (20 , Cons (30 , Nil ())))  , filter ( lst )(_%2==0))
+
+  }
+
+  @Test def testMax(){
+
+    assertEquals(Some(30) , max ( lst ))
 
   }
 

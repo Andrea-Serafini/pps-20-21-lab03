@@ -1,5 +1,10 @@
 package home
 
+import u02.Optionals.Option
+import u02.Optionals.Option._
+
+
+
 object ListsExtended {
 
   // A generic linkedlist
@@ -24,12 +29,6 @@ object ListsExtended {
 
     def filter[A](l1: List[A])(pred: A=>Boolean): List[A] = flatMap(l1)(x => if(pred(x)) Cons(x,Nil()) else Nil())
 
-      /*l1 match {
-      case Cons(h,t) if (pred(h)) => Cons(h, filter(t)(pred))
-      case Cons(_,t) => filter(t)(pred)
-      case Nil() => Nil()
-    }*/
-
     def drop[A](l: List[A], n: Int): List[A] = l match {
       case Cons(h, t) if (n > 0) => drop(t, n-1)
       case Cons(h,t) if (n == 0) => Cons(h, t)
@@ -39,6 +38,17 @@ object ListsExtended {
     def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] = l match {
       case Cons(h, t) => append(f(h),flatMap(t)(f))
       case Nil() => Nil()
+    }
+
+    def max(l: List[Int]): Option[Int] = l match {
+      case Cons(head, tail) => if(head > (max(tail) match {
+        case Some(num) => num
+        case None() => Int.MinValue
+      })) Some(head) else Some(max(tail) match {
+        case Some(a) => a
+        case None() => Int.MinValue
+      })
+      case Nil() => None()
     }
 
   }
