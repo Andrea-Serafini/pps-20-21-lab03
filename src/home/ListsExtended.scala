@@ -1,13 +1,17 @@
 package home
 
+import u02.Modules.Person
 import u02.Optionals.Option
 import u02.Optionals.Option._
+import u02.Modules.Person._
+
+import scala.annotation.tailrec
 
 
 
 object ListsExtended {
 
-  // A generic linkedlist
+  // A generic linked list
   sealed trait List[E]
 
   // a companion object (i.e., module) for List
@@ -29,9 +33,10 @@ object ListsExtended {
 
     def filter[A](l1: List[A])(pred: A=>Boolean): List[A] = flatMap(l1)(x => if(pred(x)) Cons(x,Nil()) else Nil())
 
+    @tailrec
     def drop[A](l: List[A], n: Int): List[A] = l match {
-      case Cons(h, t) if (n > 0) => drop(t, n-1)
-      case Cons(h,t) if (n == 0) => Cons(h, t)
+      case Cons(_, t) if n > 0 => drop(t, n-1)
+      case Cons(h,t) if n == 0 => Cons(h, t)
       case _ => Nil()
     }
 
@@ -50,6 +55,17 @@ object ListsExtended {
       })
       case Nil() => None()
     }
+
+    def teacherCourses(list: List[Person]): List[String] = flatMap(list) ({
+      case Teacher(_, course) => Cons(course, Nil())
+      case _ => Nil()
+    })
+
+    def teacherCoursesCombination(list: List[Person]): List[String] = filter(map(list) {
+      case Teacher(_, course) => course
+      case _ => "empty"
+    })(_ != "empty")
+
 
   }
 
