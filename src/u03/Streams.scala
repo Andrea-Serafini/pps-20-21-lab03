@@ -62,6 +62,8 @@ object Streams {
       case (Cons(head, tail), 0) => Cons(head, tail)
       case _ => Empty()
     }
+
+    def constant[A](item: A) : Stream[A] = iterate(item)(item=>item)
   }
 }
 
