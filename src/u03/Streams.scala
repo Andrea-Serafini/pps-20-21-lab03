@@ -64,6 +64,14 @@ object Streams {
     }
 
     def constant[A](item: A) : Stream[A] = iterate(item)(item=>item)
+
+    def fib_tail(n: Int, a: Int, b: Int): Int = n match {
+      case 0 => a
+      case _ => fib_tail(n - 1, b, a + b)
+    }
+
+    val fibs: Stream[Int] = map(iterate(0)(_ + 1))(fib_tail(_,0,1))
+
   }
 }
 
