@@ -66,7 +66,22 @@ object ListsExtended {
       case _ => "empty"
     })(_ != "empty")
 
+    @tailrec
+    def foldLeft[A,B](list: List[A])(default: B)(operator: (B,A) => B): B = list match {
+      case Cons(head, tail) => foldLeft(tail)(operator(default,head))(operator)
+      case _ => default
+    }
 
+    def foldRight[A,B](list: List[A])(default: B)(operator: (A, B) => B): B = list match {
+      case Cons(head, tail) => operator(head, foldRight(tail)(default)(operator))
+      case _ => default
+    }
+
+    @tailrec
+    def reverse[A](list: List[A], dest: List[A]): List[A] = list match {
+      case Cons(head,tail) => reverse(tail, append(Cons(head,Nil()), dest))
+      case _ => dest
+    }
   }
 
 
