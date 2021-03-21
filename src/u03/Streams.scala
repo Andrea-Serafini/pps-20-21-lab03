@@ -57,6 +57,11 @@ object Streams {
 
     def generate[A](seed: => A): Stream[A] = iterate(seed)(x => x)
 
+    def drop[A](stream: Stream[A])(n: Int): Stream[A] = (stream,n) match {
+      case (Cons(head, tail), n) if n>0 => drop(tail())(n - 1)
+      case (Cons(head, tail), 0) => Cons(head, tail)
+      case _ => Empty()
+    }
   }
 }
 
