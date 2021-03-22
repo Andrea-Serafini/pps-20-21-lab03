@@ -36,8 +36,7 @@ object ListsExtended {
     @tailrec
     def drop[A](l: List[A], n: Int): List[A] = l match {
       case Cons(_, t) if n > 0 => drop(t, n-1)
-      case Cons(h,t) if n == 0 => Cons(h, t)
-      case _ => Nil()
+      case _ => l
     }
 
     def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] = l match {
@@ -46,15 +45,11 @@ object ListsExtended {
     }
 
     def max(l: List[Int]): Option[Int] = l match {
-      case Cons(head, tail) => if(head > (max(tail) match {
-        case Some(num) => num
-        case None() => Int.MinValue
-      })) Some(head) else Some(max(tail) match {
-        case Some(a) => a
-        case None() => Int.MinValue
-      })
+      case Cons(head, tail) =>Some(foldLeft(l)(Int.MinValue)(greater(_,_)))
       case Nil() => None()
     }
+
+    private def greater(a: Int, b: Int): Int = if(a > b) a else b
 
     def teacherCourses(list: List[Person]): List[String] = flatMap(list) ({
       case Teacher(_, course) => Cons(course, Nil())

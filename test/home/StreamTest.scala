@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import u03.Streams.Stream
 import u03.Lists.List.{Cons, Nil}
-import u03.Streams.Stream.fibs
+import u03.Streams.Stream.{fibs, fibsOptimized}
 
 
 class StreamTest {
@@ -32,6 +32,8 @@ class StreamTest {
 
     assertEquals(Cons(0, Cons(1, Cons(1, Cons(2, Cons(3, Cons(5, Cons(8, Cons(13, Nil())))))))),
       Stream.toList(Stream.take(fibs)(8)))
+    assertEquals(Cons(0, Cons(1, Cons(1, Cons(2, Cons(3, Cons(5, Cons(8, Cons(13, Nil())))))))),
+      Stream.toList(Stream.take(fibsOptimized)(8)))
 
   }
 }

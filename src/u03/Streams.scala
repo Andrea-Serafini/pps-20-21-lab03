@@ -72,6 +72,10 @@ object Streams {
 
     val fibs: Stream[Int] = map(iterate(0)(_ + 1))(fib_tail(_,0,1))
 
+    val fibsOptimized: Stream[Int] ={
+      def fib(prev: Int, curr: Int): Stream[Int] = cons(prev,fib(curr, prev + curr))
+      fib(0, 1)
+    }
   }
 }
 
